@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武汉文理学院 · 校园拼拼乐</title>
+    <!-- 公共字体 & 图标库 (取自登录页) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ========== 全局重置 & 导航样式 (取自登录页nav，统一) ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #eef5fc 0%, #dbeafe 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 1.5rem 1.5rem;
+            position: relative;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.03"><path fill="%231d3d6b" d="M20 20h10v60H20zM40 30h10v50H40zM60 25h10v55H60zM80 35h10v45H80z"/><circle cx="25" cy="12" r="4" fill="%231d3d6b"/><circle cx="45" cy="22" r="4" fill="%231d3d6b"/><circle cx="65" cy="17" r="4" fill="%231d3d6b"/><circle cx="85" cy="27" r="4" fill="%231d3d6b"/></svg>');
+            background-repeat: repeat;
+            pointer-events: none;
+        }
+
+        /* 主导航栏 (统一) */
+        nav {
+            background-color: #2c3e50;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        nav a:hover {
+            background-color: #34495e;
+            color: #f1c40f;
+        }
+        nav a.active {
+            background-color: #1abc9c;
+            color: white;
+        }
+
+        /* ========== 页面容器：所有板块默认隐藏，仅活动板块显示 ========== */
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fade 0.2s ease;
+        }
+        .page.active-page {
+            display: block;
+        }
+        @keyframes fade { from { opacity:0.3; } to { opacity:1; } }
+
+        /* ---------- 登录页面样式 (浓缩自登录.html) ---------- */
+        .login-container {
+            max-width: 520px;
+            margin: 0 auto;
+            z-index: 10;
+        }
+        .login-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border-radius: 64px;
+            padding: 2.5rem 2.5rem 3rem;
+            box-shadow: 0 40px 60px -20px rgba(18, 45, 80, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .univ-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .univ-icon {
+            background: linear-gradient(135deg, #1f4f8f, #103262);
+            width: 70px;
+            height: 70px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 12px 0 #0b2442, 0 10px 20px rgba(0,20,50,0.3);
+        }
+        .univ-icon i {
+            font-size: 2.8rem;
+            color: #ffd966;
+            filter: drop-shadow(2px 4px 0 #b0651a);
+        }
+        .univ-title h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #112f4b;
+        }
+        .univ-title p {
+            font-weight: 600;
+            color: #26648b;
+        }
+        .input-field {
+            margin-bottom: 1.8rem;
+        }
+        .input-field label {
+            font-weight: 700;
+            color: #1b3f60;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.5rem;
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.2rem 3.2rem;
+            font-size: 1.2rem;
+            background: #ffffff;
+            border: 3px solid #c5daf2;
+            border-radius: 60px;
+            outline: none;
+            font-weight: 500;
+            color: #0f2e48;
+            box-shadow: 0 6px 0 #b0c9e3, 0 4px 10px rgba(0,0,0,0.02);
+        }
+        .input-wrapper input:focus {
+            border-color: #faa51a;
+            box-shadow: 0 6px 0 #e08d10, 0 0 0 4px #ffe1a4;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 1.4rem;
+            font-size: 1.4rem;
+            color: #26648b;
+            opacity: 0.7;
+        }
+        .hint-badge {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 1rem;
+            margin: 0.5rem 0 1.8rem;
+            background: #e3efff;
+            padding: 0.7rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #154d7a;
+            border: 1px solid #b6d3f5;
+        }
+        .badge-years {
+            background: #154d7a;
+            color: white;
+            padding: 0.2rem 1rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .login-btn {
+            background: linear-gradient(145deg, #2169af, #124b82);
+            width: 100%;
+            border: none;
+            border-radius: 80px;
+            padding: 1.2rem 2rem;
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 18px 0 #0a3052, 0 10px 20px rgba(0, 35, 70, 0.4);
+            cursor: pointer;
+            transition: 0.08s linear;
+            margin-top: 1.5rem;
+        }
+        .login-btn:active {
+            transform: translateY(12px);
+            box-shadow: 0 6px 0 #0a3052, 0 8px 16px rgba(0, 35, 70, 0.4);
+        }
+        .validation-msg {
+            margin-top: 1.5rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 60px;
+            background: rgba(235, 245, 255, 0.8);
+            backdrop-filter: blur(4px);
+            font-weight: 600;
+            color: #274d6b;
+            border: 1px solid #b0cff0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .demo-note {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #3471a1;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 1.2rem;
+            color: #1c4970;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* ---------- 封面页面样式 (取自封面.html) ---------- */
+        .cover-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .header-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+        .cover-container h1 {
+            color: #ff6b6b;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .main-img {
+            width: 100%;
+            max-width: 800px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .desc {
+            color: #333;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: #ffd166;
+            color: #333;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #ffc43d;
+        }
+
+        /* ---------- 关于我们页面样式 (取自关于我们.html，去除了多余导航) ---------- */
+        .about-container {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .about-container .navbar {
+            background: linear-gradient(90deg, #4a90e2, #63b3ed);
+            padding: 18px 0;
+            box-shadow: 0 2px 10px rgba(74, 144, 226, 0.2);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 30px;
+        }
+        .about-container .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .about-container .logo-area .logo {
+            width: 60px;
+        }
+        .about-container .logo-area h1 {
+            color: white;
+            font-size: 1.8rem;
+        }
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .section-title h2 {
+            font-size: 2.4rem;
+            color: #4e97d1;
+            display: inline-block;
+            position: relative;
+        }
+        .section-title h2::after {
+            content: "";
+            width: 50%;
+            height: 3px;
+            background: #f0ad4e;
+            position: absolute;
+            bottom: -8px;
+            left: 25%;
+        }
+        .about-text {
+            background: white;
+            padding: 35px 45px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+            margin-bottom: 50px;
+        }
+        .about-text p {
+            margin-bottom: 22px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        .image-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .image-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+            transition: transform 0.3s;
+        }
+        .image-card:hover {
+            transform: translateY(-7px);
+        }
+        .image-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+        .image-card .card-info {
+            padding: 20px;
+            text-align: center;
+            font-size: 1.05rem;
+            color: #555;
+            font-weight: 500;
+        }
+        .slogan-box {
+            background: #e8f4fc;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-left: 6px solid #4e97d1;
+            margin: 40px 0;
+        }
+
+        /* ---------- 拼拼乐页面样式 (取自拼拼乐.html，去除原导航) ---------- */
+        .pinpinle-container .app-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        .pinpinle-container .header {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .pinpinle-container .header h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(145deg, #1e2b5e, #2f3e7c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .pinpinle-container .main-panel {
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+        .publish-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.8rem 1.5rem;
+            box-shadow: 0 20px 35px -8px rgba(26, 35, 60, 0.15);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .publish-card h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #121826;
+            margin-bottom: 1.8rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #2c3a5e;
+            margin-bottom: 0.35rem;
+        }
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.85rem 1.2rem;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            background: #fafcff;
+            outline: none;
+        }
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: #3b4e8c;
+            box-shadow: 0 0 0 3px rgba(59, 78, 140, 0.15);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+        .btn.primary {
+            background: #1e2b5e;
+            color: white;
+            border: none;
+            padding: 1rem 1.8rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 8px 18px -6px #1e2b5e60;
+            width: 100%;
+        }
+        .btn.primary:hover {
+            background: #253b7a;
+        }
+        .btn.secondary {
+            background: white;
+            color: #1e2b5e;
+            border: 2px solid #dde3ed;
+            width: 100%;
+            margin-top: 0.5rem;
+            padding: 0.9rem;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .filter-bar {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1.8rem;
+            flex-wrap: wrap;
+            background: white;
+            padding: 0.6rem;
+            border-radius: 60px;
+            width: fit-content;
+            border: 1px solid #eaedf4;
+        }
+        .filter-btn {
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            color: #3c4a6b;
+            cursor: pointer;
+        }
+        .filter-btn.active {
+            background: #1e2b5e;
+            color: white;
+            box-shadow: 0 4px 12px #b0c0e0;
+        }
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .activity-card {
+            background: white;
+            border-radius: 26px;
+            padding: 1.5rem 1.3rem 1.3rem;
+            box-shadow: 0 12px 28px -10px rgba(25, 35, 55, 0.12);
+            border: 1px solid #ffffff80;
+            position: relative;
+        }
+        .activity-card.expired {
+            opacity: 0.7;
+            background: #f6f8fc;
+        }
+        .card-badge {
+            display: inline-block;
+            padding: 0.25rem 1rem;
+            background: #eef2ff;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1e2b5e;
+            margin-bottom: 1rem;
+        }
+        .route {
+            font-size: 1.2rem;
+            font-weight: 550;
+            margin: 0.5rem 0;
+            color: #2c3e5a;
+        }
+        .time-info {
+            background: #f8faff;
+            border-radius: 18px;
+            padding: 0.7rem 1rem;
+            margin: 1rem 0;
+            border: 1px dashed #aab9da;
+        }
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #b3c0d9;
+            font-size: 1.4rem;
+            cursor: pointer;
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+        }
+        .delete-btn:hover {
+            color: #c0203a;
+        }
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e2b5ee0;
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            z-index: 1000;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        @media (max-width: 800px) {
+            .pinpinle-container .main-panel {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 统一导航栏（点击切换页面） -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" id="nav-login" class="active" data-page="login-page">首页</a>
+            <a href="#" id="nav-cover" data-page="cover-page">封面</a>
+            <a href="#" id="nav-about" data-page="about-page">关于我们</a>
+            <a href="#" id="nav-pinpinle" data-page="pinpinle-page">拼拼乐</a>
+        </div>
+    </nav>
+
+    <!-- 登录页面板块 -->
+    <div id="login-page" class="page active-page">
+        <div class="login-container">
+            <div class="login-card">
+                <div class="univ-header">
+                    <div class="univ-icon"><i class="fas fa-university"></i></div>
+                    <div class="univ-title">
+                        <h1>武汉文理学院</h1>
+                        <p><i class="fas fa-leaf" style="color:#479f5e;"></i> 学号·姓名登录</p>
+                    </div>
+                </div>
+                <div class="input-field">
+                    <label><i class="fas fa-id-card"></i> 学号 <span style="font-weight:400; margin-left:auto; font-size:0.9rem;">12位数字</span></label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-user-graduate"></i>
+                        <input type="text" id="studentId" placeholder="2024xxxxxxxx" value="202360123456" maxlength="12" inputmode="numeric">
+                    </div>
+                </div>
+                <div class="input-field">
+                    <label><i class="fas fa-signature"></i> 姓名</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-pen"></i>
+                        <input type="text" id="studentName" placeholder="李华" value="张明轩">
+                    </div>
+                </div>
+                <div class="hint-badge">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>学号前四位必须在 <span class="badge-years">2021 — 2024</span> 之间</span>
+                </div>
+                <button class="login-btn" id="loginBtn"><i class="fas fa-arrow-right-to-bracket"></i> 登 录</button>
+                <div class="validation-msg" id="validationMessage">
+                    <i class="fas fa-circle-info"></i>
+                    <span id="msgText">等待验证</span>
+                </div>
+                <div class="demo-note">
+                    <i class="fas fa-magic"></i> 示例学号: 202160123456 · 202260123456 · 202360123456 · 202460123456
+                </div>
+            </div>
+            <div class="footer-note"><i class="fas fa-shield-alt"></i> 仅限武汉文理学院在校生 · 学号验证</div>
+        </div>
+    </div>
+
+    <!-- 封面页面板块 -->
+    <div id="cover-page" class="page">
+        <div class="cover-container">
+            <div class="header-area">
+                <img class="logo" src="logo.jpg" alt="校园拼拼乐logo" onerror="this.src='https://via.placeholder.com/80?text=Logo'">
+                <h1>校园拼拼乐，生活更欢乐！</h1>
+            </div>
+            <img class="main-img" src="1.jpg" alt="校园拼拼乐插画" onerror="this.src='https://via.placeholder.com/800x400?text=Cover+Image'">
+            <p class="desc">把校园里的快乐都“拼”在一起~ 一起开启有趣的校园旅程吧！</p>
+            <button class="btn" id="gotoPinpinleBtn">加入拼拼乐</button>
+        </div>
+    </div>
+
+    <!-- 关于我们页面板块 -->
+    <div id="about-page" class="page">
+        <div class="about-container">
+            <div class="navbar">
+                <div class="logo-area">
+                    <img class="logo" src="logo.jpg" alt="校园拼拼乐logo" onerror="this.src='https://via.placeholder.com/60?text=Logo'">
+                    <h1>校园拼拼乐</h1>
+                </div>
+            </div>
+            <div class="section-title"><h2>关于我们</h2></div>
+            <div class="about-text">
+                <p>校园拼拼乐，是专为武汉文理学院学子量身打造的一站式校园组队拼单平台。</p>
+            <p>在这里，校园拼拼乐致力于为每一位同学解决日常出行与校园组队的真实难题，提供一站式便捷服务。针对校区位置偏远、外出交通不便的问题，平台打造高效拼车功能，无论是前往地铁站、商圈，
+                还是节假日出行，都能快速匹配同行伙伴，大家平摊车费、省时省钱，告别独自乘车的昂贵与孤单，让外出出行更加经济、安心、高效。</p>
+            </div>
+            <div class="image-group">
+                <div class="image-card"><img src="2.jpg" onerror="this.src='https://via.placeholder.com/300x220?text=拼车'"><div class="card-info">一键拼车 · 出行成本轻松摊</div></div>
+                <div class="image-card"><img src="3.jpg" onerror="this.src='https://via.placeholder.com/300x220?text=竞赛'"><div class="card-info"></div></div>
+                <div class="image-card"><img src="4.jpg" onerror="this.src='https://via.placeholder.com/300x220?text=结伴'"><div class="card-info"></div></div>
+            </div>
+            <div class="about-text">
+                <p>同时，平台不止于拼车，更覆盖丰富的校园生活场景。无论是各类学科竞赛、创新创业比赛、文体活动，还是社团组队、学习互助、兴趣结伴，你都可以在这里快速找到志同道
+                合的队友。不用再四处打听、苦苦凑人，只需简单发布需求，就能精准对接目标伙伴，让组队不再繁琐，让每一份想法与热情都能找到同行者。</p>
+            </div>
+            <div class="image-group">
+                <div class="image-card"><img src="5.jpg" onerror="this.src='https://via.placeholder.com/300x220?text=拼车'"><div class="card-info">轻松结伴 · 组队协作不孤单</div></div>
+                <div class="image-card"><img src="6.jpg" onerror="this.src='https://via.placeholder.com/300x220?text=竞赛'"><div class="card-info"></div></div>
+                
+               </div>
+               <div class="about-text">
+               <p>校园拼拼乐以服务同学为初心，用简洁便捷的操作，打通校园内的信息壁垒，把有相同需求的同学凝聚在一起。在这里，出行更划算，组队更高效，参与活动更积极，让原本麻烦的事情变得简单轻松。我们希望用小小的
+                平台，连接大大的温暖，让每一位同学都能享受便利的校园生活，在结伴同行中收获友谊、成长与精彩，让校园生活更加充实、有趣、有温度。</p>
+        
+            </div>
+            <div class="image-group">
+                <div class="image-card"><img src="7.jpg" onerror="this.src='https://via.placeholder.com/300x220?text=拼车'"><div class="card-info">温暖陪伴 · 校园生活更有温度</div></div>
+                <div class="image-card"><img src="8.jpg" onerror="this.src='https://via.placeholder.com/300x220?text=竞赛'"><div class="card-info"></div></div>
+                
+            </div>
+            <div class="slogan-box">少一分繁琐，多一份陪伴——校园拼拼乐，让你的校园生活更高效、更划算、更有温度</div>
+        </div>
+    </div>
+
+    <!-- 拼拼乐页面板块 -->
+    <div id="pinpinle-page" class="page">
+        <div class="pinpinle-container">
+            <div class="app-container">
+                <div class="header">
+                    <h1>🚀 拼拼网 · 活动搭子</h1>
+                    <p>📍 发布邀请 · 真实信息 · 拼车/竞赛/组队</p>
+                </div>
+                <div class="main-panel">
+                    <div class="publish-card">
+                        <h2>📢 发布邀请 <span>信息准确</span></h2>
+                        <form id="publishForm">
+                            <div class="form-group">
+                                <label>活动类型 *</label>
+                                <select id="activityType" required>
+                                    <option value="拼车">🚗 拼车</option>
+                                    <option value="学科竞赛拼人">📐 学科竞赛拼人</option>
+                                    <option value="其他">🔄 其他组队</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label>起点 *</label><input type="text" id="startPoint" placeholder="例如: 武汉文理学院" required></div>
+                                <div class="form-group"><label>终点 *</label><input type="text" id="endPoint" placeholder="例如: 高车地铁站" required></div>
+                            </div>
+                            <div class="form-group"><label>活动时间 *</label><input type="datetime-local" id="activityTime" required></div>
+                            <div class="form-row">
+                                <div class="form-group"><label>发布人 *</label><input type="text" id="publisher" placeholder="姓名/昵称" required></div>
+                                <div class="form-group"><label>联系方式</label><input type="text" id="contact" placeholder="手机/微信/QQ"></div>
+                            </div>
+                            <div class="form-group"><label>备注</label><textarea id="note" rows="2" placeholder="例如: 还有2个座位 / 找数学建模队友..."></textarea></div>
+                            <button type="button" class="btn primary" id="publishBtn">✨ 发布活动邀请</button>
+                            <button type="button" class="btn secondary" id="clearFormBtn">清空表单</button>
+                        </form>
+                    </div>
+                    <div class="feed-section">
+                        <div class="filter-bar">
+                            <button class="filter-btn active" data-filter="all">📋 全部</button>
+                            <button class="filter-btn" data-filter="拼车">🚗 拼车</button>
+                            <button class="filter-btn" data-filter="学科竞赛拼人">📐 学科竞赛</button>
+                            <button class="filter-btn" data-filter="其他">🔄 其他</button>
+                        </div>
+                        <div id="activitiesContainer" class="activities-grid"></div>
+                        <div class="footer-note">⏱️ 按活动时间排序 · 过期活动半透明显示</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局toast -->
+    <div id="toast" class="toast-message" style="opacity:0;">✅ 操作成功</div>
+
+    <!-- 合并后的脚本：登录验证 + 拼拼乐功能 + 页面切换 + 登录守卫 -->
+    <script>
+        (function() {
+            // ---------- 页面切换模块 ----------
+            const pages = {
+                login: document.getElementById('login-page'),
+                cover: document.getElementById('cover-page'),
+                about: document.getElementById('about-page'),
+                pinpinle: document.getElementById('pinpinle-page')
+            };
+            const navLinks = {
+                login: document.getElementById('nav-login'),
+                cover: document.getElementById('nav-cover'),
+                about: document.getElementById('nav-about'),
+                pinpinle: document.getElementById('nav-pinpinle')
+            };
+
+            function showPage(pageId) {
+                // 隐藏所有页面
+                Object.values(pages).forEach(p => p.classList.remove('active-page'));
+                // 显示选中页面
+                document.getElementById(pageId).classList.add('active-page');
+                // 更新导航active类
+                Object.keys(navLinks).forEach(key => {
+                    const link = navLinks[key];
+                    if (key === 'login' && pageId === 'login-page') link.classList.add('active');
+                    else if (key === 'cover' && pageId === 'cover-page') link.classList.add('active');
+                    else if (key === 'about' && pageId === 'about-page') link.classList.add('active');
+                    else if (key === 'pinpinle' && pageId === 'pinpinle-page') link.classList.add('active');
+                    else link.classList.remove('active');
+                });
+            }
+
+            // 登录守卫：只有登录才能访问封面/关于/拼拼乐
+            function isLoggedIn() {
+                return sessionStorage.getItem('loggedIn') === 'true';
+            }
+
+            function requireLogin(targetPage) {
+                if (!isLoggedIn() && targetPage !== 'login-page') {
+                    alert('请先登录');
+                    showPage('login-page');
+                    return false;
+                }
+                return true;
+            }
+
+            // 导航点击处理
+            navLinks.login.addEventListener('click', (e) => { e.preventDefault(); showPage('login-page'); });
+            navLinks.cover.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                if (requireLogin('cover-page')) showPage('cover-page'); 
+            });
+            navLinks.about.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                if (requireLogin('about-page')) showPage('about-page'); 
+            });
+            navLinks.pinpinle.addEventListener('click', (e) => { 
+                e.preventDefault(); 
+                if (requireLogin('pinpinle-page')) {
+                    showPage('pinpinle-page');
+                    // 如果拼拼乐数据已渲染但可能因为隐藏未更新，但render已在初始化调用，无需额外操作
+                }
+            });
+
+            // 封面页“加入拼拼乐”按钮
+            document.getElementById('gotoPinpinleBtn').addEventListener('click', () => {
+                if (requireLogin('pinpinle-page')) showPage('pinpinle-page');
+            });
+
+            // ---------- 登录逻辑 (取自登录.html) ----------
+            const studentIdInput = document.getElementById('studentId');
+            const studentNameInput = document.getElementById('studentName');
+            const loginBtn = document.getElementById('loginBtn');
+            const msgText = document.getElementById('msgText');
+            const validationMsgDiv = document.getElementById('validationMessage');
+
+            function validateStudentId(id) {
+                const digitRegex = /^\d{12}$/;
+                if (!digitRegex.test(id)) return { valid: false, message: '❌ 学号必须为12位数字' };
+                const prefix = id.substring(0, 4);
+                const prefixNum = parseInt(prefix, 10);
+                if (prefixNum >= 2021 && prefixNum <= 2024) return { valid: true, message: `✅ 学号前缀 ${prefix} 符合 (${prefixNum}级)` };
+                else return { valid: false, message: `❌ 学号前四位 ${prefix} 不在2021-2024范围内` };
+            }
+
+            function updateValidationUI() {
+                const id = studentIdInput.value.trim();
+                const name = studentNameInput.value.trim();
+                if (name === '') {
+                    msgText.innerText = '⛔ 姓名不能为空';
+                    validationMsgDiv.style.background = '#fff0dd';
+                } else {
+                    const result = validateStudentId(id);
+                    msgText.innerText = result.valid ? `${result.message} · 姓名: ${name}` : result.message;
+                    validationMsgDiv.style.background = result.valid ? '#e2f3e2' : '#ffe6e6';
+                }
+            }
+
+            function handleLogin() {
+                const id = studentIdInput.value.trim();
+                const name = studentNameInput.value.trim();
+                if (name === '') { alert('请填写姓名'); updateValidationUI(); return; }
+                const result = validateStudentId(id);
+                if (result.valid) {
+                    const yearPrefix = id.substring(0,4);
+                    sessionStorage.setItem('loggedIn', 'true');
+                    alert(`✅ 登录成功！欢迎 ${name} (${yearPrefix}级)`);
+                    showPage('cover-page');   // 登录后跳转封面
+                } else {
+                    alert(`❌ 登录失败\n${result.message}`);
+                    updateValidationUI();
+                }
+            }
+
+            studentIdInput.addEventListener('input', updateValidationUI);
+            studentNameInput.addEventListener('input', updateValidationUI);
+            loginBtn.addEventListener('click', handleLogin);
+            [studentIdInput, studentNameInput].forEach(input => {
+                input.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
+            });
+            updateValidationUI();
+
+            // ---------- 拼拼乐逻辑 (取自拼拼乐.html，适配合并) ----------
+            (function() {
+                const STORAGE_KEY = 'pinpin_activities';
+                let activities = [];
+                let currentFilter = 'all';
+
+                const container = document.getElementById('activitiesContainer');
+                const filterBtns = document.querySelectorAll('.filter-btn');
+                const publishBtn = document.getElementById('publishBtn');
+                const clearFormBtn = document.getElementById('clearFormBtn');
+                const toastEl = document.getElementById('toast');
+
+                const typeSelect = document.getElementById('activityType');
+                const startInput = document.getElementById('startPoint');
+                const endInput = document.getElementById('endPoint');
+                const timeInput = document.getElementById('activityTime');
+                const publisherInput = document.getElementById('publisher');
+                const contactInput = document.getElementById('contact');
+                const noteInput = document.getElementById('note');
+
+                function showToast(text, duration = 2000) {
+                    toastEl.style.transition = 'opacity 0.2s';
+                    toastEl.style.opacity = '1';
+                    toastEl.innerText = text;
+                    clearTimeout(window.toastTimer);
+                    window.toastTimer = setTimeout(() => { toastEl.style.opacity = '0'; }, duration);
+                }
+
+                function parseLocalTime(timeStr) {
+                    if (!timeStr) return new Date(NaN);
+                    let parts = timeStr.split(/[T:-]/);
+                    if (parts.length >= 5) {
+                        return new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]), parseInt(parts[3]), parseInt(parts[4]));
+                    }
+                    return new Date(NaN);
+                }
+
+                function formatDateShort(timeStr) {
+                    let d = parseLocalTime(timeStr);
+                    if (isNaN(d.getTime())) return timeStr || '无效时间';
+                    return `${d.getMonth()+1}月${d.getDate()}日 ${d.getHours().toString().padStart(2,'0')}:${d.getMinutes().toString().padStart(2,'0')}`;
+                }
+
+                function isExpired(timeStr) {
+                    let activityDate = parseLocalTime(timeStr);
+                    return !isNaN(activityDate.getTime()) && activityDate < new Date();
+                }
+
+                function sortActivitiesByTime(acts) {
+                    return [...acts].sort((a,b) => (parseLocalTime(a.time).getTime()||0) - (parseLocalTime(b.time).getTime()||0));
+                }
+
+                function saveToStorage() { localStorage.setItem(STORAGE_KEY, JSON.stringify(activities)); }
+
+                function loadFromStorage() {
+                    let stored = localStorage.getItem(STORAGE_KEY);
+                    if (stored) {
+                        try { activities = JSON.parse(stored); } catch { activities = []; }
+                    } else {
+                        activities = [
+                            { id: Date.now()-100000, type:'拼车', start:'武汉文理学院', end:'高车地铁站', time:'2025-03-15T14:30', publisher:'李明', contact:'138****1234', note:'还有2个座位' },
+                            { id: Date.now()-200000, type:'学科竞赛拼人', start:'图书馆', end:'数学建模赛场', time:'2025-03-20T09:00', publisher:'王芳', contact:'139****5678', note:'缺2人，有基础优先' },
+                            { id: Date.now()-150000, type:'拼车', start:'文理学院', end:'汉口站', time:'2025-03-16T08:00', publisher:'陈晨', contact:'182****4321', note:'还有3空位' }
+                        ];
+                    }
+                    activities = activities.filter(a => a && a.type && a.start && a.end && a.time);
+                    saveToStorage();
+                }
+
+                function render() {
+                    let filtered = activities;
+                    if (currentFilter !== 'all') filtered = activities.filter(act => act.type === currentFilter);
+                    filtered = sortActivitiesByTime(filtered);
+                    if (!filtered.length) {
+                        container.innerHTML = `<div style="grid-column:1/-1; background:#f0f3fc; border-radius:40px; padding:3rem; text-align:center;">✨ 暂无活动，点击发布～</div>`;
+                        return;
+                    }
+                    let html = '';
+                    filtered.forEach(act => {
+                        const expired = isExpired(act.time);
+                        html += `
+                            <div class="activity-card ${expired?'expired':''}" data-id="${act.id}">
+                                <div class="card-badge">${act.type}</div>
+                                <div class="route">📍 ${act.start} → ${act.end}</div>
+                                <div class="time-info">🕒 ${formatDateShort(act.time)} ${expired?'<span class="expired-tag">⌛已过期</span>':''}</div>
+                                <div class="publisher">👤 ${act.publisher || '匿名'} <span class="contact">📞 ${act.contact || '未提供'}</span></div>
+                                ${act.note ? `<div class="extra-note">📝 ${act.note}</div>` : ''}
+                                <button class="delete-btn" onclick="removeActivity(${act.id})">✕</button>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                }
+
+                window.removeActivity = function(id) {
+                    if (!confirm('删除此活动？')) return;
+                    activities = activities.filter(act => act.id !== id);
+                    saveToStorage(); render(); showToast('🗑️ 已删除');
+                };
+
+                function publishActivity() {
+                    let type = typeSelect.value;
+                    let start = startInput.value.trim();
+                    let end = endInput.value.trim();
+                    let time = timeInput.value;
+                    let publisher = publisherInput.value.trim();
+                    if (!type || !start || !end || !time || !publisher) {
+                        showToast('❌ 请填写所有必填项', 2000); return;
+                    }
+                    let newAct = {
+                        id: Date.now(),
+                        type, start, end, time,
+                        publisher,
+                        contact: contactInput.value.trim(),
+                        note: noteInput.value.trim()
+                    };
+                    activities.push(newAct);
+                    saveToStorage(); render();
+                    startInput.value = endInput.value = timeInput.value = publisherInput.value = contactInput.value = noteInput.value = '';
+                    typeSelect.value = '拼车';
+                    showToast('✅ 发布成功');
+                }
+
+                function resetForm() {
+                    if (confirm('清空表单？')) {
+                        startInput.value = endInput.value = timeInput.value = publisherInput.value = contactInput.value = noteInput.value = '';
+                        typeSelect.value = '拼车';
+                    }
+                }
+
+                publishBtn.addEventListener('click', publishActivity);
+                clearFormBtn.addEventListener('click', resetForm);
+                filterBtns.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        let filter = e.target.getAttribute('data-filter');
+                        currentFilter = filter;
+                        filterBtns.forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                        render();
+                    });
+                });
+
+                loadFromStorage(); render();
+                window.addEventListener('storage', (e) => { if (e.key === STORAGE_KEY) { loadFromStorage(); render(); } });
+            })();
+
+            // ---------- 初始化：已登录直接显示封面，否则显示登录 ----------
+            if (isLoggedIn()) {
+                showPage('cover-page');
+            } else {
+                showPage('login-page');
+                sessionStorage.removeItem('loggedIn'); // 确保干净
+            }
+        })();
+    </script>
+</body>
+</html>
